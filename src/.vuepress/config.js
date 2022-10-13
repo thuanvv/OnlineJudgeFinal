@@ -5,7 +5,7 @@ module.exports = {
     base: '/OnlineJudge/',
     themeConfig: {
         logo: '/favicon.ico',
-        lastUpdated: '上次更新: ', // string | boolean
+        lastUpdated: '上次更新', // string | boolean
         nav: [
             { text: '首页', link: '/' },
             { text: '文档', link: '/deploy/' },

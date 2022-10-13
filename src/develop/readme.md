@@ -1,7 +1,7 @@
 # 开发手册
 
 >说明：系统在开发初期并没有考虑过多的开发原则，没有实现前后端分离，没有遵循RESTful标准等。
-即日起，开发将尽最大可能地遵循[前后端接口规范 - RESTful版](https://zhuanlan.zhihu.com/p/508570164)。
+即日起，开发将尽最大可能地遵循[前后端接口规范 - RESTful版](https://github.com/winterant/restful-api-specification)。
 
 ## 生产环境
 
