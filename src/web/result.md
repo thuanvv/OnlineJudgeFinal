@@ -1,6 +1,6 @@
 # 判题结果
 
-配置文件[config/oj/judge_result.php](https://github.com/winterant/OnlineJudge/blob/master/config/oj/judge_result.php)
+配置文件[judge_result.php](https://github.com/winterant/OnlineJudge/blob/master/config/oj/judge_result.php)
 
 ```php
 <?php

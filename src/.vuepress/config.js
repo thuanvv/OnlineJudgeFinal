@@ -26,13 +26,12 @@ module.exports = {
             {
                 title: '使用说明',
                 collapsable: false,
-                sidebarDepth: 0,
+                sidebarDepth: 1,
                 children: [
-                    // '/web/',
+                    '/web/',
                     '/web/judge.md',
                     '/web/spj.md',
                     '/web/result.md',
-                    '/web/admin.md',
                 ]
             },
             {
