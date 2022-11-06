@@ -99,19 +99,25 @@ docker-compose up -d
 
    >然而，如果[winterant](https://github.com/winterant)给你了原始仓库的推送权限，那么你无需fork原始仓库，只配置一个原始仓库就可以了。
 
-3. 拉取最新代码；
-```bash 
+3. 从github获取最新代码；
+```bash
+git fetch --all  # 拉取远程代码，但不合并到本地版本库分支
+git reset --hard origin/master # 将远程master分支代码覆盖本地、暂存区、本地版本库分支
 git branch --set-upstream-to=origin/master master  # 设置本地分支master的获取源, 注意本地分支名也可能是main
-git pull  # 将从远程仓库origin/master获取最新代码
 ```
+
 4. **开始愉快地开发吧！**
 
 <div align="center">
   <img src="./img/coding.png" width="400">
 </div>
 
-需要注意的问题：
-- 修改配置类文件后，需要进入容器内执行`php artisan opimize`使配置重新被加载才能生效；
+【开发过程中需要注意的问题】
+- 如果修改了某些配置文件（如`routes/web.php`,`config/*.php`等），需要重新加载配置生效；
+  ```bash
+  docker exec -it lduoj-web bash  # 进入容器
+  php artisan opimize   # 容器内执行，重新加载配置
+  ```
 
 5. 开发完某个功能后，你需要提交(commit)你的代码（注意这不代表提交到远程仓库，仅仅是提交到本地仓库）；
   你可以使用vscode自带的代码管理器来提交，也可以使用以下命令进行提交：
@@ -122,8 +128,10 @@ git pull  # 将从远程仓库origin/master获取最新代码
 
 6. 向远程仓库推送代码；将本地的改动推送到你的远程仓库：
 ```bash
+git pull  # 先将远程代码合并到本地，若有冲突则解决冲突之后再push
 git push --set-upstream forked master
 ```
+
 然后在你的远程仓库中，向原始仓库发起Pull Request，并联系[winterant](https://github.com/winterant)审阅、合并代码。
 
 >然而，如果你拥有原始仓库的推送权限，那么你无需fork原始仓库，而是直接向原始仓库推送代码：

@@ -32,7 +32,7 @@ docker-compose up -d
 
 - 版本内更新(docker tag不变)
   ```bash
-  docker-compose pull web judge-server
+  docker-compose pull web judge
   docker-compose up -d
   ```
 - 跨版本升级  
