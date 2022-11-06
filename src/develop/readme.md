@@ -5,15 +5,15 @@
 
 ## 生产环境
 
+![framework](./img/lduoj-framework.jpg)
+
 生产环境目前采用`docker-compose`编排方式部署，包含4个镜像，分别是
 - `winterant/lduoj:1.2`; [Web端](https://github.com/winterant/OnlineJudge)，基于Ubuntu20.04镜像构建；暴露80端口；
 - `winterant/judge:1.2`; [判题端](https://github.com/winterant/judge)，基于Ubuntu20.04镜像构建；
 - `mysql:8.0`; 官方镜像；
 - `redis:7.0`; 官方镜像；
 
-编排启动的容器将以只读方式读取环境变量配置文件`lduoj.conf`。
-
-详情参考[deploy分支](https://github.com/winterant/OnlineJudge/tree/deploy)。
+编排启动的容器将以只读方式读取环境变量配置文件`lduoj.conf`（详情参考[deploy分支](https://github.com/winterant/OnlineJudge/tree/deploy)）。
 
 ## 本地开发
 
