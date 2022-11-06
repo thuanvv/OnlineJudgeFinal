@@ -20,12 +20,6 @@
 >开发前，你需要对[Laravel框架](https://learnku.com/docs/laravel/6.x)有一些基本的了解。  
 >本地开发最简单的方法是按照生产环境的部署方式部署到本地电脑，并将源码映射到宿主机，在本地打开源码目录进行开发即可。
 
-需要注意的问题：
-- 修改配置文件需要使laravel框架重新加载才能生效；
-  - 在容器内执行`php artisan opimize`使配置被重新加载。
-
-如果希望向主仓库贡献代码，请先Fork[主仓库](https://github.com/winterant/OnlineJudge)，开发完成后向主仓库`master`分支发起`Pull Request`即可。
-
 ### 1. 个人电脑需要安装的软件
 
 #### 代码编辑器或IDE（二选一）
@@ -96,9 +90,14 @@ docker-compose up -d
    git remote add origin git@github.com:winterant/OnlineJudge.git  # 添加原始远程仓库，用于pull获取最新代码
    git remote add forked git@github.com:<GithubUser>/OnlineJudge.git  # 添加个人远程仓库，用于push改动的代码
    ```
-   说明：上述命令配置了两个远程仓库，`origin`是原始仓库，仅作者拥有推送权限；`forked`是你自己的仓库，这个仓库应当是你fork自原始仓库。如果作者给你了原始仓库的推送权限，那么你只需要配置一个原始仓库。
+   说明：上述命令配置了两个远程仓库，`origin`是原始仓库，仅[winterant](https://github.com/winterant)拥有推送权限；`forked`是你自己的仓库，这个仓库应当是你fork自原始仓库。
+   `origin`、`forked`仅仅是在本地的别名，你可以随便起名字，远程仓库不会得知它们。
 
-  ![git-repo](./img/git-repo.jpg)
+   <div align="center">
+    <img src="./img/git-repo.jpg" width="500">
+   </div>
+
+   >然而，如果[winterant](https://github.com/winterant)给你了原始仓库的推送权限，那么你无需fork原始仓库，只配置一个原始仓库就可以了。
 
 3. 拉取最新代码；
 ```bash 
@@ -107,25 +106,27 @@ git pull  # 将从远程仓库origin/master获取最新代码
 ```
 4. **开始愉快地开发吧！**
 
-![coding](./img/coding.png)
+<div align="center">
+  <img src="./img/coding.png" width="400">
+</div>
 
-5. 开发完某个功能后，你需要提交(commit)你的代码（注意这不代表提交到远程仓库，仅仅是提交到本地仓库）  
-  你可以使用vscode自带的代码管理器来提交，也可以使用以下命令进行提交
+需要注意的问题：
+- 修改配置类文件后，需要进入容器内执行`php artisan opimize`使配置重新被加载才能生效；
+
+1. 开发完某个功能后，你需要提交(commit)你的代码（注意这不代表提交到远程仓库，仅仅是提交到本地仓库）；
+  你可以使用vscode自带的代码管理器来提交，也可以使用以下命令进行提交：
   ```bash
   git add .  # .代表当前项目目录全部添加到暂存区等候提交，你也可以替换成你希望提交的那部分文件
   git commit -m "committing information."
   ```
 
-6. 向远程仓库推送代码
-
-将本地的改动推送到你的远程仓库：
+6. 向远程仓库推送代码；将本地的改动推送到你的远程仓库：
 ```bash
 git push --set-upstream forked master
 ```
-然后在你的仓库中，向原始仓库发起Pull Request，联系作者审阅、合并代码。
+然后在你的远程仓库中，向原始仓库发起Pull Request，并联系[winterant](https://github.com/winterant)审阅、合并代码。
 
----
-然而，如果你拥有原始仓库的推送权限，那么你无需fork原始仓库，而是直接向原始仓库推送代码：
-```bash
-git push --set-upstream origin master
-```
+>然而，如果你拥有原始仓库的推送权限，那么你无需fork原始仓库，而是直接向原始仓库推送代码：
+>```bash
+>git push --set-upstream origin master
+>```
