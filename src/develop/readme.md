@@ -8,7 +8,7 @@
 ![framework](./img/lduoj-framework.jpg)
 
 生产环境目前采用`docker-compose`编排方式部署，包含4个镜像，分别是
-- `winterant/lduoj:1.2`; [Web端](https://github.com/winterant/OnlineJudge)，基于Ubuntu20.04镜像构建；暴露80端口；
+- `winterant/lduoj:1.3`; [Web端](https://github.com/winterant/OnlineJudge)，基于Ubuntu22.04镜像构建；暴露80端口；
 - `winterant/judge:1.2`; [判题端](https://github.com/winterant/judge)，基于Ubuntu20.04镜像构建；
 - `mysql:8.0`; 官方镜像；
 - `redis:7.0`; 官方镜像；
@@ -17,7 +17,7 @@
 
 ## 本地开发
 
->开发前，你需要对[Laravel框架](https://learnku.com/docs/laravel/6.x)有一些基本的了解。  
+>开发前，你需要对[Laravel框架](https://learnku.com/docs/laravel/9.x)有一些基本的了解。  
 >本地开发最简单的方法是按照生产环境的部署方式部署到本地电脑，并将源码映射到宿主机，在本地打开源码目录进行开发即可。
 
 ### 1. 个人电脑需要安装的软件
