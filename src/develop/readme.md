@@ -20,7 +20,7 @@
 >开发前，你需要对[Laravel框架](https://learnku.com/docs/laravel/9.x)有一些基本的了解。  
 >本地开发最简单的方法是按照生产环境的部署方式部署到本地电脑，并将源码映射到宿主机，在本地打开源码目录进行开发即可。
 
-### 1. 个人电脑需要安装的软件
+### 一. 个人电脑需要安装的软件
 
 #### 代码编辑器或IDE（二选一）
 
@@ -49,12 +49,11 @@ docker-compose -v
 注意：现在github口令验证变严格了，从本地向远程仓库推送代码，只能通过ssh方式，所以你需要参考[git基础操作笔记](https://blog.csdn.net/winter2121/article/details/124227331)配置好github access ssh key。
 
 
-### 2. 将项目部署到本地
+### 二. 将项目部署到本地
 
-1. 获取编排脚本和配置文件；
+1. 获取部署脚本；
 ```bash
 git clone -b deploy https://github.com/winterant/OnlineJudge.git
-cd OnlineJudge
 ```
 PS:也可以自己从网页下载。
 
@@ -81,10 +80,29 @@ docker-compose up -d
 
 4. 打开浏览器访问<http://localhost:8080>，成功显示首页则代表部署成功。
 
-### 3. 开始开发
+### 三. 网页端开发与维护
 
-1. 使用vscode打开文件夹`OnlineJudge/data/web/`，即可看到Web端源码。
-2. 配置git仓库；
+>通过`docker-compose`，我们把项目以容器的形式部署到本地，其中容器`lduoj-web`包含了网页端所有功能模块。
+容器内已经安装了项目运行所需的环境：
+>- ubuntu 22.04
+>- nginx 1.8
+>- php 8.1
+>- composer 2.4
+>- laravel 9.0
+>
+>我们重点关注文件夹`/app/`，这里面是基于laravel框架开发的网页端源码。如果你不慎删除或破坏了`/app/`，可以从`/app_src/`找到备份。
+>
+>我们有两种方式来进行开发（二选一）：
+>1. 将文件夹`/app/`映射到宿主机（具体挂载路径已在上文修改`docker-compose.yml`时设置好了），随后在宿主机中打开挂载的文件夹进行开发即可，这是推荐的方式，下文将以这种方式讲解。
+>2. 不映射源码到宿主机，直接连接容器进行开发。容器相当于一个隔离的系统，你可以理解为虚拟机或者一个新电脑，与你的电脑是隔离的。注意，一旦容器被删除、重启或重建，可能导致你的代码丢失。要使用vscode实现这种开发形式，需要安装以下插件：
+>    - Docker
+>    - Remote - SSH
+>    - Dev Containers
+>
+>    安装好这些插件后，你可以在Remote Explorer中直接连接容器，然后打开`/app/`进行开发。
+
+1. **使用vscode打开文件夹`OnlineJudge/data/web/`（或连接容器打开文件夹`/app/`），即可看到Web端源码。**
+2. **配置git仓库；**
    ```bash
    git init  # 初始化仓库
    git remote add origin git@github.com:winterant/OnlineJudge.git  # 添加原始远程仓库，用于pull获取最新代码
@@ -99,17 +117,17 @@ docker-compose up -d
 
    >然而，如果[winterant](https://github.com/winterant)给你了原始仓库的推送权限，那么你无需fork原始仓库，只配置一个原始仓库就可以了。
 
-3. 从github获取最新代码；
+3. **从github获取最新代码；**
 ```bash
-git fetch --all  # 拉取远程代码，但不合并到本地版本库分支
-git reset --hard origin/master # 将远程master分支代码覆盖本地、暂存区、本地版本库分支
+git fetch --all  # 拉取远程代码，但不合并到本地仓库
+git reset --hard origin/master # 将远程master分支代码覆盖本地、暂存区、工作区当前分支(master)
 git branch --set-upstream-to=origin/master master  # 设置本地分支master的获取源, 注意本地分支名也可能是main
 ```
 
 4. **开始愉快地开发吧！**
 
 <div align="center">
-  <img src="./img/coding.png" width="400">
+  <img src="./img/coding.png" width="300">
 </div>
 
 【开发过程中需要注意的问题】
@@ -119,14 +137,14 @@ git branch --set-upstream-to=origin/master master  # 设置本地分支master的
   php artisan opimize   # 容器内执行，重新加载配置
   ```
 
-5. 开发完某个功能后，你需要提交(commit)你的代码（注意这不代表提交到远程仓库，仅仅是提交到本地仓库）；
+5. **开发完某个功能后，你需要提交(commit)你的代码（注意这不代表提交到远程仓库，仅仅是提交到本地仓库）；**
   你可以使用vscode自带的代码管理器来提交，也可以使用以下命令进行提交：
   ```bash
   git add .  # .代表当前项目目录全部添加到暂存区等候提交，你也可以替换成你希望提交的那部分文件
   git commit -m "committing information."
   ```
 
-6. 向远程仓库推送代码；将本地的改动推送到你的远程仓库：
+6. **向远程仓库推送代码；将本地的改动推送到你的远程仓库：**
 ```bash
 git pull  # 先将远程代码合并到本地，若有冲突则解决冲突之后再push
 git push --set-upstream forked master
@@ -138,3 +156,11 @@ git push --set-upstream forked master
 >```bash
 >git push --set-upstream origin master
 >```
+
+7. **封装镜像**
+
+作者[winterant](https://github.com/winterant)会定期将项目封装为官方镜像，并上传至[docker hub](https://hub.docker.com/r/winterant/lduoj/tags)。当然，如果有需要，你可以自行封装为镜像，用于本地测试。
+```bash
+cd ./data/web
+docker build -t winterant/lduoj:1.x .
+```
