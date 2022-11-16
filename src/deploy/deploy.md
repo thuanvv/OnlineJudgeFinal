@@ -17,11 +17,19 @@
   docker-compose version
   ```
 
-## 🔨 一键部署
+## 🔨 部署
 
+下面以1.3版本为例进行部署（已发行版本列表[releases](https://github.com/winterant/OnlineJudge/releases)）。
+
+获取配置文件并解压：
 ```bash
-git clone -b deploy https://github.com/winterant/OnlineJudge.git
-cd OnlineJudge
+wget https://github.com/winterant/OnlineJudge/releases/download/1.3/lduoj-v1.3.zip
+unzip lduoj-v1.3.zip
+```
+
+启动服务：
+```bash
+cd lduoj-v1.3
 docker-compose up -d
 ```
 
@@ -30,13 +38,30 @@ docker-compose up -d
 
 ## 🚗 升级
 
-- 版本内更新(docker tag不变)
+- 版本内更新(docker tag不变，无须修改任何配置)，一般会更新一些影响较小的bug修复。
   ```bash
   docker-compose pull web judge
   docker-compose up -d
   ```
-- 跨版本升级  
-  务必提前备份！获取稳定版本[releases](https://github.com/winterant/LDUOnlineJudge/releases)，解压后进入文件夹，一键部署即可。
+- 跨版本升级（例如1.3升级到1.4）  
+  1. 参照【部署】获取新版本并解压；
+    ```bash
+    wget https://github.com/winterant/OnlineJudge/releases/download/1.4/lduoj-v1.4.zip
+    unzip lduoj-v1.4.zip
+    ```
+  2. 将旧版本中的`./data/`文件夹移动到新版本文件夹中；
+    ```bash
+    mv lduoj-v1.3/data lduoj-v1.4/
+    ```
+  3. 修改必要的配置；
+    ```bash
+    vim lduoj-v1.4/lduoj.conf
+    ```
+  4. 在新版本文件夹中启动服务即可；
+    ```bash
+    cd lduoj-v1.4
+    docker-compose up -d
+    ```
 
 ## 💿 备份/迁移
 
