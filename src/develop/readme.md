@@ -51,37 +51,55 @@ docker-compose -v
 
 ### 二. 将项目部署到本地
 
-1. 获取部署脚本；
+1. 获取部署脚本（以1.3版本为例，更多版本详见[releases](https://github.com/winterant/OnlineJudge/releases)）；
 ```bash
-git clone -b deploy https://github.com/winterant/OnlineJudge.git
+wget https://github.com/winterant/OnlineJudge/releases/download/1.3/lduoj-v1.3.zip
+unzip lduoj-v1.3.zip
+cd lduoj-v1.3
 ```
 PS:也可以自己从网页下载。
 
-下文所有开发操作都将发生在文件夹`OnlineJudge`内，所以建议你把它放在一个你熟悉的位置（Windows用户不要放在C盘）。
+下文所有开发操作都将发生在文件夹`lduoj-v1.3`内，所以建议你把它放在一个你熟悉的位置（Windows用户不要放在C盘）。
 
-2. 修改`docker-compose.yml`，配置源码挂载到本地；
-```
+2. 修改必要的配置
+
+`docker-compose.yml`：
+```yml
 # reduced code...
 
 services:
   web:
     # reduced code...
+    ports:
+      - 8080:80          # 映射宿主机的8080端口到容器内的80端口
     volumes:
-      - ./data/web:/app  # 取消原挂载路径，改为此挂载路径
+      - ./data/web:/app  # 将源码将挂载到宿主机`./data/web/`
 
 # reduced code...
+```
+
+`lduoj.conf`：
+```shell
+APP_DEBUG=true    # 启用laravel框架的debug模式
 ```
 
 3. 启动容器；
 ```bash
 docker-compose up -d
 ```
-注意命令要在宿主机文件夹`OnlineJudge`下执行。稍等几分钟，docker会自动下载好镜像并启动容器。
+注意命令要在宿主机文件夹`lduoj-v1.3/`下执行。稍等几分钟，docker会自动下载好镜像并启动容器。
 
-4. 打开浏览器访问<http://localhost:8080>，成功显示首页则代表部署成功。
+4. **打开浏览器访问<http://localhost:8080>，成功显示首页则代表部署成功。**
 
-### 三. 网页端开发与维护
+5. （建议）默认情况下，laravel框架的开发依赖包没有被安装在`winterant/lduoj`镜像内。
+   大多数情况下，不使用它们也不会影响开发。你可以在`composer.json`的`require-dev`部分看到这些仅用于开发的依赖包。
+   如果你是资深开发者或对此项目有长期开发计划，那么非常建议你手动安装这些依赖：
+   ```bash
+   docker exec -it ludoj-web bash                 # 进入容器
+   composer install --ignore-platform-reqs --dev  # 安装开发依赖包
+   ```
 
+6. 相关操作的解释
 >通过`docker-compose`，我们把项目以容器的形式部署到本地，其中容器`lduoj-web`包含了网页端所有功能模块。
 容器内已经安装了项目运行所需的环境：
 >- ubuntu 22.04
@@ -91,17 +109,21 @@ docker-compose up -d
 >- laravel 9.0
 >
 >我们重点关注文件夹`/app/`，这里面是基于laravel框架开发的网页端源码。如果你不慎删除或破坏了`/app/`，可以从`/app_src/`找到备份。
->
+>默认情况下，`docker-compose.yml`配置了将持久化文件目录`/app/storage/`挂载到了本地，
+>为了便于我们进行开发，我们在上面第2步中修改了配置，将整个源码所在文件夹`/app/`挂载到了本地`./data/web/`。
+
+### 三. 网页端开发与维护
+
 >我们有两种方式来进行开发（二选一）：
->1. 将文件夹`/app/`映射到宿主机（具体挂载路径已在上文修改`docker-compose.yml`时设置好了），随后在宿主机中打开挂载的文件夹进行开发即可，这是推荐的方式，下文将以这种方式讲解。
->2. 不映射源码到宿主机，直接连接容器进行开发。容器相当于一个隔离的系统，你可以理解为虚拟机或者一个新电脑，与你的电脑是隔离的。注意，一旦容器被删除、重启或重建，可能导致你的代码丢失。要使用vscode实现这种开发形式，需要安装以下插件：
+>1. 将文件夹`/app/`映射到宿主机（具体挂载路径已在上文修改`docker-compose.yml`时设置好了），随后在宿主机中打开挂载的文件夹进行开发即可，**这是推荐的方式，下文将以这种方式讲解**。
+>2. 不映射源码到宿主机，直接连接容器进行开发。容器相当于一个隔离的系统，你可以理解为虚拟机或者一个新电脑，与你的电脑是隔离的。**注意，这种方式的缺点是一旦容器被删除、重启或重建，可能导致你的代码丢失**。要使用vscode实现这种开发形式，需要安装以下插件：
 >    - Docker
 >    - Remote - SSH
 >    - Dev Containers
 >
 >    安装好这些插件后，你可以在Remote Explorer中直接连接容器，然后打开`/app/`进行开发。
 
-1. **使用vscode打开文件夹`OnlineJudge/data/web/`（或连接容器打开文件夹`/app/`），即可看到Web端源码。**
+1. **使用vscode打开文件夹`lduoj-v1.3/data/web/`（或连接容器打开文件夹`/app/`），即可看到Web端源码。**
 2. **配置git仓库；**
    ```bash
    git init  # 初始化仓库
@@ -152,6 +174,7 @@ git push --set-upstream forked master
 
 然后在你的远程仓库中，向原始仓库发起Pull Request，并联系[winterant](https://github.com/winterant)审阅、合并代码。
 
+>**附加说明**：  
 >然而，如果你拥有原始仓库的推送权限，那么你无需fork原始仓库，而是直接向原始仓库推送代码：
 >```bash
 >git push --set-upstream origin master
