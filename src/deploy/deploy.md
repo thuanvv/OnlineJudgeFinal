@@ -19,17 +19,17 @@
 
 ## 🔨 部署
 
-下面以1.3版本为例进行部署（已发行版本列表[releases](https://github.com/winterant/OnlineJudge/releases)）。
+下面以1.4版本为例进行部署（已发行版本列表[releases](https://github.com/winterant/OnlineJudge/releases)）。
 
 获取配置文件并解压：
 ```bash
-wget https://github.com/winterant/OnlineJudge/releases/download/1.3/lduoj-v1.3.zip
-unzip lduoj-v1.3.zip
+wget https://github.com/winterant/OnlineJudge/releases/download/1.4/lduoj-v1.4.zip
+unzip lduoj-v1.4.zip
 ```
 
 启动服务：
 ```bash
-cd lduoj-v1.3
+cd lduoj-v1.4
 docker-compose up -d
 ```
 
