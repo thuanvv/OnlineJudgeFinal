@@ -19,17 +19,14 @@
 
 ## 🔨 部署
 
-下面以1.4版本为例进行部署（已发行版本列表[releases](https://github.com/winterant/OnlineJudge/releases)）。
-
-获取配置文件并解压：
+获取最新部署脚本（也可以自行前往网页下载）：
 ```bash
-wget https://github.com/winterant/OnlineJudge/releases/download/1.4/lduoj-v1.4.zip
-unzip lduoj-v1.4.zip
+git clone -b deploy https://github.com/winterant/OnlineJudge.git
 ```
 
 启动服务：
 ```bash
-cd lduoj-v1.4
+cd OnlineJudge
 docker-compose up -d
 ```
 
@@ -38,46 +35,42 @@ docker-compose up -d
 
 ## 🚗 升级
 
-- 版本内更新(docker tag不变，无须修改任何配置)，一般会更新一些影响较小的bug修复。
+- **版本内更新**；版本号不变，无须修改任何配置，一般会修复一些影响较小的bug修复或开发一些小功能。
   ```bash
   docker-compose pull web judge
   docker-compose up -d
   ```
-- 跨版本升级（例如1.3升级到1.4）  
-  1. 参照【部署】获取新版本并解压；
-    ```bash
-    wget https://github.com/winterant/OnlineJudge/releases/download/1.4/lduoj-v1.4.zip
-    unzip lduoj-v1.4.zip
-    ```
-  2. 将旧版本中的`./data/`文件夹移动到新版本文件夹中；
-    ```bash
-    mv lduoj-v1.3/data lduoj-v1.4/
-    ```
-  3. 修改必要的配置；
-    ```bash
-    vim lduoj-v1.4/lduoj.conf
-    ```
-  4. 在新版本文件夹中启动服务即可；
-    ```bash
-    cd lduoj-v1.4
-    docker-compose up -d
-    ```
+- **跨版本升级**；例如v1.4升级到v1.5。原理是替换现有的`docker-compose.yml`,`lduoj.conf`为[最新部署脚本](https://github.com/winterant/OnlineJudge/tree/deploy)。  
+
+  升级之前，请先停止服务：
+  ```bash
+  docker-compose down
+  ```
+  
+  您有两种方式来更新您的本地部署脚本：
+  - 第一种，您完全可以查看最新部署脚本发生了哪些改动([commits](https://github.com/winterant/OnlineJudge/commits/deploy))，自行修改本地脚本即可。
+  - 第二种，如果您不清楚最新部署脚本做了哪些改动，那么可以参照上文部署方式重新下载[最新部署脚本](https://github.com/winterant/OnlineJudge/tree/deploy)，以替换掉现有的部署脚本，并自行修改配置`lduoj.conf`。
+
+  然后，重新启动服务即可：
+  ```bash
+  docker-compose up -d
+  ```
 
 ## 💿 备份/迁移
 
 ### 备份
 1. 将`docker-compose.yml`所在文件夹打包备份；
     ```bash
-    tar -cf - ./lduoj | pigz -p $(nproc) > lduoj_bak.tar.gz
+    tar -cf - ./OnlineJudge | pigz -p $(nproc) > OnlineJudge_bak.tar.gz
     ```
 
 ### 恢复
 1. 解压备份包
     ```bash
-    tar -zxvf lduoj_bak.tar.gz
+    tar -zxvf OnlineJudge_bak.tar.gz
     ```
 2. 一键部署
     ```bash
-    cd lduoj_bak
+    cd OnlineJudge_bak
     docker-compose up -d
     ```

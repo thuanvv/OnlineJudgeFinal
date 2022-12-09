@@ -8,7 +8,7 @@
 ![framework](./img/lduoj-framework.jpg)
 
 生产环境目前采用`docker-compose`编排方式部署，包含4个镜像，分别是
-- `winterant/lduoj:1.3`; [Web端](https://github.com/winterant/OnlineJudge)，基于Ubuntu22.04镜像构建；暴露80端口；
+- `winterant/lduoj:latest`; [Web端](https://github.com/winterant/OnlineJudge)，基于Ubuntu22.04镜像构建；暴露80端口；
 - `winterant/judge:1.2`; [判题端](https://github.com/winterant/judge)，基于Ubuntu20.04镜像构建；
 - `mysql:8.0`; 官方镜像；
 - `redis:7.0`; 官方镜像；
@@ -51,15 +51,14 @@ docker-compose -v
 
 ### 二. 将项目部署到本地
 
-1. 获取部署脚本（以1.3版本为例，更多版本详见[releases](https://github.com/winterant/OnlineJudge/releases)）；
+1. 获取最新部署脚本（全部版本详见[releases](https://github.com/winterant/OnlineJudge/releases)）；
 ```bash
-wget https://github.com/winterant/OnlineJudge/releases/download/1.3/lduoj-v1.3.zip
-unzip lduoj-v1.3.zip
-cd lduoj-v1.3
+git clone -b deploy https://github.com/winterant/OnlineJudge.git
+cd OnlineJudge
 ```
 PS:也可以自己从网页下载。
 
-下文所有开发操作都将发生在文件夹`lduoj-v1.3`内，所以建议你把它放在一个你熟悉的位置（Windows用户不要放在C盘）。
+下文所有开发操作都将发生在文件夹`OnlineJudge`内，所以建议你把它放在一个你熟悉的位置（Windows用户不要放在C盘）。
 
 2. 修改必要的配置
 
@@ -71,9 +70,9 @@ services:
   web:
     # reduced code...
     ports:
-      - 8080:80          # 映射宿主机的8080端口到容器内的80端口
+      - 8080:80          # 映射宿主机的8080端口到容器内的80端口; 
     volumes:
-      - ./data/web:/app  # 将源码将挂载到宿主机`./data/web/`
+      - ./data/web:/app  # 将源码将挂载到宿主机`./data/web/`; **本地开发务必修改！**
 
 # reduced code...
 ```
@@ -87,7 +86,7 @@ APP_DEBUG=true    # 启用laravel框架的debug模式
 ```bash
 docker-compose up -d
 ```
-注意命令要在宿主机文件夹`lduoj-v1.3/`下执行。稍等几分钟，docker会自动下载好镜像并启动容器。
+注意该命令要在宿主机文件夹`OnlineJudge/`下执行。稍等几分钟，docker会自动下载好镜像并启动容器。
 
 4. **打开浏览器访问<http://localhost:8080>，成功显示首页则代表部署成功。**
 
@@ -99,7 +98,7 @@ docker-compose up -d
    composer install --ignore-platform-reqs --dev  # 安装开发依赖包
    ```
 
-6. 相关操作的解释
+6. 上述部署方式的解释
 >通过`docker-compose`，我们把项目以容器的形式部署到本地，其中容器`lduoj-web`包含了网页端所有功能模块。
 容器内已经安装了项目运行所需的环境：
 >- ubuntu 22.04
