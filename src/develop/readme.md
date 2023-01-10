@@ -151,11 +151,11 @@ git branch --set-upstream-to=origin/master master  # 设置本地分支master的
   <img src="./img/coding.png" width="300">
 </div>
 
-【开发过程中需要注意的问题】
-- 如果修改了某些配置文件（如`routes/web.php`,`config/*.php`等），需要重新加载配置生效；
+**开发过程中需要注意的问题**
+- 清空缓存，以在开发过程中保持配置文件（如`routes/web.php`,`config/*.php`等）随时生效；
   ```bash
   docker exec -it lduoj-web bash  # 进入容器
-  php artisan opimize   # 容器内执行，重新加载配置
+  php artisan opimize:clear       # 容器内执行，清空配置的缓存
   ```
 
 5. **开发完某个功能后，你需要提交(commit)你的代码（注意这不代表提交到远程仓库，仅仅是提交到本地仓库）；**
