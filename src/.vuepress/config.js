@@ -20,7 +20,8 @@ module.exports = {
                 children: [
                     '/deploy/',
                     '/deploy/deploy.md',
-                    '/deploy/network.md'
+                    '/deploy/network.md',
+                    '/deploy/email.md'
                 ]
             },
             {
