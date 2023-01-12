@@ -8,8 +8,8 @@
 ![framework](./img/lduoj-framework.jpg)
 
 生产环境目前采用`docker-compose`编排方式部署，包含4个镜像，分别是
-- `winterant/lduoj:latest`; [Web端](https://github.com/winterant/OnlineJudge)，基于Ubuntu22.04镜像构建；暴露80端口；
-- `winterant/judge:1.2`; [判题端](https://github.com/winterant/judge)，基于Ubuntu20.04镜像构建；
+- `winterant/lduoj`; [Web端](https://github.com/winterant/OnlineJudge)，基于Ubuntu22.04镜像构建；暴露80端口；
+- `winterant/judge`; [判题端](https://github.com/winterant/judge)，基于Ubuntu20.04镜像构建；
 - `mysql:8.0`; 官方镜像；
 - `redis:7.0`; 官方镜像；
 
@@ -22,7 +22,7 @@
 
 ### 一. 个人电脑需要安装的软件
 
-#### 代码编辑器或IDE（二选一）
+#### 1. 代码编辑器或IDE（二选一）
 
 - [vscode](https://code.visualstudio.com)（推荐）；  
   vscode是一个编辑器，你需要安装一些必备的插件才能进行开发：
@@ -33,7 +33,7 @@
      - Git History（可选；可视化查看文件修改历史）
 - [PhpStorm](https://www.jetbrains.com/phpstorm/)；
 
-#### docker
+#### 2. docker
 
 不论你是用哪种操作系统，你需要安装对应平台的[docker](https://www.docker.com/)。
 对于windows、macOS，docker桌面版安装好自带`docker-compose`，可以验证：
@@ -42,7 +42,7 @@ docker-compose -v
 ```
 如果执行失败，则需自行安装`docker-compose`。
 
-#### git
+#### 3. git
 你必须安装[git](https://git-scm.com/)才能向远程仓库贡献代码。
 [git基础操作笔记](https://blog.csdn.net/winter2121/article/details/124227331)。
 
@@ -52,41 +52,39 @@ docker-compose -v
 ### 二. 将项目部署到本地
 
 1. 获取最新部署脚本（全部版本详见[releases](https://github.com/winterant/OnlineJudge/releases)）；
-```bash
-git clone -b deploy https://github.com/winterant/OnlineJudge.git
-cd OnlineJudge
-```
-PS:也可以自己从网页下载。
+    ```bash
+    git clone -b deploy https://github.com/winterant/OnlineJudge.git
+    cd OnlineJudge
+    ```
+    PS:也可以自己从网页下载。
 
-下文所有开发操作都将发生在文件夹`OnlineJudge`内，所以建议你把它放在一个你熟悉的位置（Windows用户不要放在C盘）。
+    下文所有开发操作都将发生在文件夹`OnlineJudge`内，所以建议你把它放在一个你熟悉的位置（Windows用户不要放在C盘）。
 
 2. 修改必要的配置
-
-`docker-compose.yml`：
-```yml
-# reduced code...
-
-services:
-  web:
+    `docker-compose.yml`：
+    ```yml
     # reduced code...
-    ports:
-      - 8080:80          # 映射宿主机的8080端口到容器内的80端口; 
-    volumes:
-      - ./data/web:/app  # 将源码将挂载到宿主机`./data/web/`; **本地开发务必修改！**
 
-# reduced code...
-```
+    services:
+      web:
+        # reduced code...
+        ports:
+          - 8080:80          # 映射宿主机的8080端口到容器内的80端口; 
+        volumes:
+          - ./data/web:/app  # 将源码将挂载到宿主机`./data/web/`; **本地开发务必修改！**
 
-`lduoj.conf`：
-```shell
-APP_DEBUG=true    # 启用laravel框架的debug模式
-```
+    # reduced code...
+    ```
 
-3. 启动容器；
-```bash
-docker-compose up -d
-```
-注意该命令要在宿主机文件夹`OnlineJudge/`下执行。稍等几分钟，docker会自动下载好镜像并启动容器。
+    `lduoj.conf`：
+    ```shell
+    APP_DEBUG=true    # 启用laravel框架的debug模式
+    ```
+
+3. 启动容器；在宿主机文件夹`OnlineJudge/`下执行。稍等几分钟，docker会自动下载好镜像并启动容器。
+    ```bash
+    docker-compose up -d
+    ```
 
 4. **打开浏览器访问<http://localhost:8080>，成功显示首页则代表部署成功。**
 
@@ -99,17 +97,17 @@ docker-compose up -d
    ```
 
 6. 上述部署方式的解释
->通过`docker-compose`，我们把项目以容器的形式部署到本地，其中容器`lduoj-web`包含了网页端所有功能模块。
-容器内已经安装了项目运行所需的环境：
->- ubuntu 22.04
->- nginx 1.8
->- php 8.1
->- composer 2.4
->- laravel 9.0
->
->我们重点关注文件夹`/app/`，这里面是基于laravel框架开发的网页端源码。如果你不慎删除或破坏了`/app/`，可以从`/app_src/`找到备份。
->默认情况下，`docker-compose.yml`配置了将持久化文件目录`/app/storage/`挂载到了本地，
->为了便于我们进行开发，我们在上面第2步中修改了配置，将整个源码所在文件夹`/app/`挂载到了本地`./data/web/`。
+    >通过`docker-compose`，我们把项目以容器的形式部署到本地，其中容器`lduoj-web`包含了网页端所有功能模块。
+    容器内已经安装了项目运行所需的环境：
+    >- ubuntu 22.04
+    >- nginx 1.8
+    >- php 8.1
+    >- composer 2.4
+    >- laravel 9.0
+    >
+    >我们重点关注文件夹`/app/`，这里面是基于laravel框架开发的网页端源码。如果你不慎删除或破坏了`/app/`，可以从`/app_src/`找到备份。
+    >默认情况下，`docker-compose.yml`配置了将持久化文件目录`/app/storage/`挂载到了本地，
+    >为了便于我们进行开发，我们在上面第2步中修改了配置，将整个源码所在文件夹`/app/`挂载到了本地`./data/web/`。
 
 ### 三. 网页端开发与维护
 
@@ -122,7 +120,7 @@ docker-compose up -d
 >
 >    安装好这些插件后，你可以在Remote Explorer中直接连接容器，然后打开`/app/`进行开发。
 
-1. **使用vscode打开文件夹`lduoj-v1.3/data/web/`（或连接容器打开文件夹`/app/`），即可看到Web端源码。**
+1. **使用vscode打开文件夹`./data/web/`（或连接容器打开文件夹`/app/`），即可看到Web端源码。**
 2. **配置git仓库；**
    ```bash
    git init  # 初始化仓库
